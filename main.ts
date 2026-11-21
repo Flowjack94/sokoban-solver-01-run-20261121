@@ -543,8 +543,12 @@ function solveLevel(level) {
 // ------------------------------------------------------------------- main
 
 function main() {
-  const inputDir = process.argv[2] || '/input';
-  const outputDir = process.argv[3] || '/output';
+  // Paths: argv overrides (local runs) then the harness's own directory
+  // overrides (MAKEFUN_INPUT_DIR / MAKEFUN_OUTPUT_DIR, set by grade-local's
+  // process driver and by the draw tool), then the container paths.
+  // These only say WHERE the files live; the answers never depend on them.
+  const inputDir = process.argv[2] || process.env.MAKEFUN_INPUT_DIR || '/input';
+  const outputDir = process.argv[3] || process.env.MAKEFUN_OUTPUT_DIR || '/output';
   const ids = fs.readdirSync(inputDir).filter((d) => {
     try { return fs.statSync(path.join(inputDir, d)).isDirectory(); } catch { return false; }
   }).sort();
